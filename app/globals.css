@@ -107,6 +107,11 @@
       box-shadow 0.5s ease;
   }
 
+  .glass-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--card-border));
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25), 0 0 12px color-mix(in srgb, var(--accent) 10%, transparent);
+  }
+
   /* Holographic shimmer */
   .glass-card--holographic {
     background: linear-gradient(
@@ -181,5 +186,49 @@
   /* Text balance */
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* Themed inputs */
+  .input-themed {
+    background: color-mix(in srgb, var(--bg-secondary) 60%, transparent);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: var(--text);
+    font-size: 0.75rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+  .input-themed:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+  .input-themed::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.5;
+  }
+  .input-themed::-webkit-calendar-picker-indicator {
+    filter: invert(0.7);
+  }
+
+  /* Select variant */
+  select.input-themed {
+    cursor: pointer;
+    padding-right: 8px;
+  }
+
+  /* Textarea variant */
+  .textarea-themed {
+    background: color-mix(in srgb, var(--bg-secondary) 30%, transparent);
+    border: none;
+    border-radius: 8px;
+    padding: 8px;
+    color: var(--text);
+    outline: none;
+    caret-color: var(--accent);
+    transition: box-shadow 0.2s ease;
+  }
+  .textarea-themed:focus {
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent);
   }
 }

@@ -105,7 +105,7 @@ function HabitRow({
           <td key={key} className="p-0.5">
             <button
               onClick={() => onToggle(habit.id, key)}
-              className="w-3.5 h-3.5 rounded-sm transition-colors block"
+              className="w-4 h-4 rounded-sm transition-all block hover:scale-125"
               style={{
                 background: done ? 'var(--accent)' : 'var(--card-border)',
                 outline: isToday ? '1px solid var(--accent)' : 'none',
@@ -196,9 +196,18 @@ export default function HabitTracker() {
       )}
 
       {habits.length === 0 ? (
-        <p className="text-sm text-center py-8" style={{ color: 'var(--text-secondary)' }}>
-          No habits yet. Add one to get started.
-        </p>
+        <div className="flex flex-col items-center justify-center py-8 gap-2">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ color: 'var(--text-secondary)', opacity: 0.4 }}>
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <path d="M8 14l2 2 4-4" />
+          </svg>
+          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+            No habits tracked yet. Start building streaks!
+          </p>
+        </div>
       ) : (
         <div className="flex-1 overflow-auto min-h-0">
           <table className="border-separate border-spacing-0" aria-label="Habit tracker grid">

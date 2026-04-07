@@ -26,7 +26,9 @@ export default function Calendar() {
   const [viewDate, setViewDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [newEventText, setNewEventText] = useState('');
-  const { events, addEvent, removeEvent } = useCalendarStore();
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editText, setEditText] = useState('');
+  const { events, addEvent, removeEvent, updateEvent } = useCalendarStore();
 
   const days = useMemo(() => {
     const monthStart = startOfMonth(viewDate);
@@ -173,7 +175,30 @@ export default function Calendar() {
                     style={{ background: 'var(--accent)' }}
                     aria-hidden
                   />
-                  <span className="flex-1">{ev.text}</span>
+                  {editingId === ev.id ? (
+                    <input
+                      type="text"
+                      value={editText}
+                      onChange={(e) => setEditText(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') { updateEvent(ev.id, editText); setEditingId(null); }
+                        if (e.key === 'Escape') setEditingId(null);
+                      }}
+                      onBlur={() => { if (editText.trim()) updateEvent(ev.id, editText); setEditingId(null); }}
+                      autoFocus
+                      className="flex-1 bg-transparent border-b text-xs outline-none"
+                      style={{ borderColor: 'var(--accent)', color: 'var(--text)' }}
+                      aria-label={`Edit event: ${ev.text}`}
+                    />
+                  ) : (
+                    <span
+                      className="flex-1 cursor-pointer"
+                      onClick={() => { setEditingId(ev.id); setEditText(ev.text); }}
+                      title="Click to edit"
+                    >
+                      {ev.text}
+                    </span>
+                  )}
                   <button
                     onClick={() => removeEvent(ev.id)}
                     className="opacity-0 group-hover:opacity-60 hover:opacity-100 transition-opacity"

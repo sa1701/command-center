@@ -11,12 +11,21 @@ interface ThemeSlice {
 }
 
 // ---------------------------------------------------------------------------
+// Focus mode slice
+// ---------------------------------------------------------------------------
+
+interface FocusSlice {
+  focusMode: boolean;
+  toggleFocusMode: () => void;
+}
+
+// ---------------------------------------------------------------------------
 // Root store
 // Structured so widget slices (todos, habits, pomodoro, etc.) can be merged
 // in by other agents without touching the core theme logic.
 // ---------------------------------------------------------------------------
 
-type DashboardStore = ThemeSlice;
+type DashboardStore = ThemeSlice & FocusSlice;
 // Future slices will extend this type:
 //   & TodoSlice & HabitSlice & PomodoroSlice & ...
 
@@ -26,6 +35,10 @@ const useDashboardStore = create<DashboardStore>()(
       // --- Theme ---
       themeId: 'ot-raimi',
       setTheme: (id: string) => set({ themeId: id }),
+
+      // --- Focus mode ---
+      focusMode: false,
+      toggleFocusMode: () => set((s) => ({ focusMode: !s.focusMode })),
 
       // --- Widget stores will be added here ---
       // e.g. todos: [], addTodo: () => {}, ...

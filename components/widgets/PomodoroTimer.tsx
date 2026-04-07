@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { usePomodoroStore } from '@/lib/widget-store';
 
 // ---------------------------------------------------------------------------
@@ -56,11 +57,17 @@ export default function PomodoroTimer() {
     sessions,
     workDuration,
     breakDuration,
+    isMuted,
     start,
     pause,
     reset,
     tick,
+    setWorkDuration,
+    setBreakDuration,
+    toggleMute,
   } = usePomodoroStore();
+
+  const [showSettings, setShowSettings] = useState(false);
 
   const prevRunning = useRef(isRunning);
   const prevTimeLeft = useRef(timeLeft);
@@ -74,11 +81,11 @@ export default function PomodoroTimer() {
 
   // Beep when timer hits zero
   useEffect(() => {
-    if (prevTimeLeft.current > 0 && timeLeft === 0) {
+    if (prevTimeLeft.current > 0 && timeLeft === 0 && !isMuted) {
       playBeep();
     }
     prevTimeLeft.current = timeLeft;
-  }, [timeLeft]);
+  }, [timeLeft, isMuted]);
 
   useEffect(() => {
     prevRunning.current = isRunning;
@@ -178,7 +185,89 @@ export default function PomodoroTimer() {
         >
           Reset
         </button>
+
+        <button
+          onClick={() => setShowSettings((v) => !v)}
+          className="px-3 py-2 rounded text-sm border transition-opacity hover:opacity-80"
+          style={{
+            borderColor: showSettings ? 'var(--accent)' : 'var(--card-border)',
+            color: showSettings ? 'var(--accent)' : 'var(--text-secondary)',
+          }}
+          aria-label="Timer settings"
+          aria-expanded={showSettings}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+          </svg>
+        </button>
       </div>
+
+      {/* Settings panel */}
+      <AnimatePresence>
+        {showSettings && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="w-full overflow-hidden"
+          >
+            <div className="border-t pt-3 space-y-3" style={{ borderColor: 'var(--card-border)' }}>
+              {/* Work duration presets */}
+              <div>
+                <p className="text-xs mb-1.5" style={{ color: 'var(--text-secondary)' }}>Work Duration</p>
+                <div className="flex gap-1.5">
+                  {[15, 25, 30, 45, 60].map((min) => (
+                    <button
+                      key={min}
+                      onClick={() => setWorkDuration(min * 60)}
+                      className="px-2 py-1 rounded text-xs transition-colors"
+                      style={{
+                        background: workDuration === min * 60 ? 'var(--accent)' : 'transparent',
+                        color: workDuration === min * 60 ? 'var(--bg)' : 'var(--text-secondary)',
+                        border: `1px solid ${workDuration === min * 60 ? 'var(--accent)' : 'var(--card-border)'}`,
+                      }}
+                    >
+                      {min}m
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Break duration presets */}
+              <div>
+                <p className="text-xs mb-1.5" style={{ color: 'var(--text-secondary)' }}>Break Duration</p>
+                <div className="flex gap-1.5">
+                  {[5, 10, 15].map((min) => (
+                    <button
+                      key={min}
+                      onClick={() => setBreakDuration(min * 60)}
+                      className="px-2 py-1 rounded text-xs transition-colors"
+                      style={{
+                        background: breakDuration === min * 60 ? 'var(--accent)' : 'transparent',
+                        color: breakDuration === min * 60 ? 'var(--bg)' : 'var(--text-secondary)',
+                        border: `1px solid ${breakDuration === min * 60 ? 'var(--accent)' : 'var(--card-border)'}`,
+                      }}
+                    >
+                      {min}m
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Mute toggle */}
+              <button
+                onClick={toggleMute}
+                className="flex items-center gap-2 text-xs transition-opacity hover:opacity-80"
+                style={{ color: 'var(--text-secondary)' }}
+                aria-label={isMuted ? 'Unmute sound' : 'Mute sound'}
+              >
+                {isMuted ? '🔇' : '🔊'} Sound {isMuted ? 'Off' : 'On'}
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

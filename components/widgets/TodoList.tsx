@@ -18,6 +18,7 @@ import {
   arrayMove,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { isToday, isPast, isTomorrow, parseISO, format } from 'date-fns';
 import { useTodoStore, type Todo, type Priority } from '@/lib/widget-store';
 
 // ---------------------------------------------------------------------------
@@ -109,6 +110,32 @@ function SortableItem({
         {todo.text}
       </span>
 
+      {/* Due date badge */}
+      {todo.dueDate && (() => {
+        const date = parseISO(todo.dueDate);
+        const overdue = isPast(date) && !isToday(date);
+        const dueToday = isToday(date);
+        const dueTomorrow = isTomorrow(date);
+        const badgeColor = overdue
+          ? '#ef4444'
+          : dueToday
+          ? '#f59e0b'
+          : 'var(--text-secondary)';
+        return (
+          <span
+            className="shrink-0 text-xs px-1.5 py-0.5 rounded border"
+            style={{
+              color: badgeColor,
+              borderColor: badgeColor,
+              opacity: dueTomorrow || (!overdue && !dueToday) ? 0.7 : 1,
+            }}
+            aria-label={`Due ${format(date, 'MMM d')}`}
+          >
+            {format(date, 'MMM d')}
+          </span>
+        );
+      })()}
+
       {/* Delete */}
       <button
         onClick={() => onDelete(todo.id)}
@@ -135,6 +162,7 @@ export default function TodoList() {
   const { todos, addTodo, toggleTodo, deleteTodo, reorderTodos } = useTodoStore();
   const [input, setInput] = useState('');
   const [priority, setPriority] = useState<Priority>('medium');
+  const [dueDate, setDueDate] = useState<string>('');
   const [filter, setFilter] = useState<FilterTab>('all');
 
   const sensors = useSensors(
@@ -145,9 +173,10 @@ export default function TodoList() {
   const handleAdd = useCallback(() => {
     const trimmed = input.trim();
     if (!trimmed) return;
-    addTodo(trimmed, priority);
+    addTodo(trimmed, priority, dueDate || undefined);
     setInput('');
-  }, [input, priority, addTodo]);
+    setDueDate('');
+  }, [input, priority, dueDate, addTodo]);
 
   function handleKeyDown(e: React.KeyboardEvent) {
     if (e.key === 'Enter') handleAdd();
@@ -206,6 +235,15 @@ export default function TodoList() {
           ))}
         </select>
 
+        <input
+          type="date"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+          className="bg-transparent border rounded px-2 py-1.5 text-xs cursor-pointer outline-none"
+          style={{ borderColor: 'var(--card-border)', color: 'var(--text-secondary)' }}
+          aria-label="Due date"
+        />
+
         <button
           onClick={handleAdd}
           disabled={!input.trim()}
@@ -244,12 +282,15 @@ export default function TodoList() {
       {/* List */}
       <div className="flex-1 overflow-y-auto min-h-0">
         {filtered.length === 0 ? (
-          <p
-            className="text-sm text-center py-8"
-            style={{ color: 'var(--text-secondary)' }}
-          >
-            {filter === 'completed' ? 'No completed tasks yet.' : 'No tasks here.'}
-          </p>
+          <div className="flex flex-col items-center justify-center py-8 gap-2">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ color: 'var(--text-secondary)', opacity: 0.4 }}>
+              <path d="M9 11l3 3L22 4" />
+              <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+            </svg>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+              {filter === 'completed' ? 'No completed tasks yet' : 'All clear! Add a task above'}
+            </p>
+          </div>
         ) : (
           <DndContext
             sensors={sensors}
