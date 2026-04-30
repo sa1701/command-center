@@ -220,14 +220,32 @@ export const useGradeStore = create<GradeState>()(
   persist(
     (set) => ({
       grades: [
+        // UoW Australia — 2025 Autumn
         { id: uid(), subject: 'CSIT205 — IT Project Mgmt', grade: 79, credits: 6 },
         { id: uid(), subject: 'CSIT214 — System Analysis', grade: 75, credits: 6 },
+        { id: uid(), subject: 'CSCI323 — Algorithm Design', grade: 50, credits: 6 },
+        { id: uid(), subject: 'CSCI316 — Big Data Mining', grade: 36, credits: 6 },
+        // UoW Australia — 2025 Spring
         { id: uid(), subject: 'CSCI218 — Algorithms', grade: 67, credits: 6 },
         { id: uid(), subject: 'CSIT127 — Network Fundamentals', grade: 66, credits: 6 },
         { id: uid(), subject: 'CSIT226 — Information Systems', grade: 66, credits: 6 },
-        { id: uid(), subject: 'CSCI323 — Algorithm Design', grade: 50, credits: 6 },
-        { id: uid(), subject: 'CSCI316 — Big Data Mining', grade: 36, credits: 6 },
         { id: uid(), subject: 'ISIT312 — Info Systems Analysis', grade: 17, credits: 6 },
+        // Dubai — 2024 Autumn
+        { id: uid(), subject: 'CSCI235 — Data Structures', grade: 70, credits: 6 },
+        { id: uid(), subject: 'CSCI251 — C++ Programming', grade: 60, credits: 6 },
+        { id: uid(), subject: 'MATH255 — Mathematics', grade: 55, credits: 6 },
+        // Dubai — 2024 Spring
+        { id: uid(), subject: 'CSCI203 — Algorithms', grade: 57, credits: 6 },
+        { id: uid(), subject: 'CSIT128 — Web Development', grade: 61, credits: 6 },
+        { id: uid(), subject: 'CSCI251 — C++ (Attempt 1)', grade: 44, credits: 6 },
+        // Dubai — 2024 Winter
+        { id: uid(), subject: 'CSIT115 — Databases', grade: 63, credits: 6 },
+        { id: uid(), subject: 'CSIT121 — OOP Python', grade: 57, credits: 6 },
+        { id: uid(), subject: 'CSIT127 — Networks (Dubai)', grade: 38, credits: 6 },
+        // Dubai — 2023 Autumn
+        { id: uid(), subject: 'CSIT110 — Intro to IT', grade: 78, credits: 6 },
+        { id: uid(), subject: 'CSIT114 — General IT', grade: 85, credits: 6 },
+        { id: uid(), subject: 'CSIT123 — Systems Analysis', grade: 77, credits: 6 },
       ],
       addGrade: (subject, grade, credits) =>
         set((s) => ({
@@ -239,7 +257,7 @@ export const useGradeStore = create<GradeState>()(
           grades: s.grades.map((g) => (g.id === id ? { ...g, ...updates } : g)),
         })),
     }),
-    { name: 'widget-grades-v2' }
+    { name: 'widget-grades-v3' }
   )
 );
 
