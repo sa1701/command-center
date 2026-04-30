@@ -36,12 +36,13 @@ export const useTodoStore = create<TodoState>()(
   persist(
     (set) => ({
       todos: [
-        { id: uid(), text: 'PHYS295 — Virtual Sunspot Lab', completed: false, priority: 'high' as Priority, createdAt: Date.now(), dueDate: '2026-04-02' },
-        { id: uid(), text: 'CSIT321 — A1: Initial Project Description', completed: false, priority: 'high' as Priority, createdAt: Date.now(), dueDate: '2026-04-03' },
-        { id: uid(), text: 'PHYS295 — Engagement Quiz Week 5', completed: false, priority: 'medium' as Priority, createdAt: Date.now(), dueDate: '2026-04-09' },
-        { id: uid(), text: 'PHYS295 — Mars Explorer Assignment', completed: false, priority: 'high' as Priority, createdAt: Date.now(), dueDate: '2026-04-17' },
-        { id: uid(), text: 'CSIT314 — 1st Progress Report', completed: false, priority: 'high' as Priority, createdAt: Date.now(), dueDate: '2026-04-17' },
-        { id: uid(), text: 'CSCI316 — Individual Assignment', completed: false, priority: 'high' as Priority, createdAt: Date.now(), dueDate: '2026-04-19' },
+        { id: uid(), text: 'PHYS295 — Engagement Quiz Week 8', completed: false, priority: 'high' as Priority, createdAt: Date.now(), dueDate: '2026-05-01' },
+        { id: uid(), text: 'PHYS295 — Mid-session Exam Prep Quiz', completed: false, priority: 'high' as Priority, createdAt: Date.now(), dueDate: '2026-05-03' },
+        { id: uid(), text: 'CSIT321 — Capstone: weekly progress update', completed: false, priority: 'medium' as Priority, createdAt: Date.now(), dueDate: '2026-05-08' },
+        { id: uid(), text: 'CSIT314 — 2nd Progress Report', completed: false, priority: 'high' as Priority, createdAt: Date.now(), dueDate: '2026-05-15' },
+        { id: uid(), text: 'PHYS295 — Spectral Classification Quiz', completed: false, priority: 'medium' as Priority, createdAt: Date.now(), dueDate: '2026-05-15' },
+        { id: uid(), text: 'CSCI316 — Assignment 2', completed: false, priority: 'high' as Priority, createdAt: Date.now(), dueDate: '2026-05-22' },
+        { id: uid(), text: 'Set up career-ops and scan for internships', completed: false, priority: 'medium' as Priority, createdAt: Date.now() },
       ],
       addTodo: (text, priority, dueDate) =>
         set((s) => ({
@@ -60,7 +61,7 @@ export const useTodoStore = create<TodoState>()(
         set((s) => ({ todos: s.todos.filter((t) => t.id !== id) })),
       reorderTodos: (todos) => set({ todos }),
     }),
-    { name: 'widget-todos' }
+    { name: 'widget-todos-v2' }
   )
 );
 
