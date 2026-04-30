@@ -219,11 +219,14 @@ export const useGradeStore = create<GradeState>()(
   persist(
     (set) => ({
       grades: [
-        { id: uid(), subject: 'System Analysis', grade: 85, credits: 6 },
-        { id: uid(), subject: 'Generative AI', grade: 79, credits: 6 },
-        { id: uid(), subject: 'Python Programming', grade: 78, credits: 6 },
-        { id: uid(), subject: 'Cyber Security', grade: 77, credits: 6 },
-        { id: uid(), subject: 'IT Project Management', grade: 75, credits: 6 },
+        { id: uid(), subject: 'CSIT205 — IT Project Mgmt', grade: 79, credits: 6 },
+        { id: uid(), subject: 'CSIT214 — System Analysis', grade: 75, credits: 6 },
+        { id: uid(), subject: 'CSCI218 — Algorithms', grade: 67, credits: 6 },
+        { id: uid(), subject: 'CSIT127 — Network Fundamentals', grade: 66, credits: 6 },
+        { id: uid(), subject: 'CSIT226 — Information Systems', grade: 66, credits: 6 },
+        { id: uid(), subject: 'CSCI323 — Algorithm Design', grade: 50, credits: 6 },
+        { id: uid(), subject: 'CSCI316 — Big Data Mining', grade: 36, credits: 6 },
+        { id: uid(), subject: 'ISIT312 — Info Systems Analysis', grade: 17, credits: 6 },
       ],
       addGrade: (subject, grade, credits) =>
         set((s) => ({
@@ -549,10 +552,10 @@ export const useProjectStore = create<ProjectState>()(
   persist(
     (set) => ({
       projects: [
-        { id: uid(), name: 'AI/ML App', description: 'Image classifier or NLP tool', status: 'not_started', progress: 0, techStack: ['Python', 'scikit-learn', 'TensorFlow'] },
-        { id: uid(), name: 'Full-Stack Web App', description: 'Polished web app', status: 'not_started', progress: 0, techStack: ['Next.js', 'React', 'Node.js'] },
-        { id: uid(), name: 'Python CLI Tool', description: 'Useful automation/dev tool', status: 'not_started', progress: 0, techStack: ['Python', 'Click', 'Rich'] },
-        { id: uid(), name: 'Game/Creative Project', description: 'Interactive game or creative coding', status: 'not_started', progress: 0, techStack: ['Python', 'Pygame'] },
+        { id: uid(), name: 'RAG PDF Chat', description: 'Retrieval-augmented PDF chat — LangChain, FAISS, Ollama', status: 'complete', progress: 100, githubUrl: 'https://github.com/sa1701/rag-pdf-chat', techStack: ['Python', 'LangChain', 'FAISS', 'Ollama'] },
+        { id: uid(), name: 'TaskFlow', description: 'Full-stack task manager with auth and real-time DB', status: 'complete', progress: 100, githubUrl: 'https://github.com/sa1701/taskflow', techStack: ['Next.js', 'Supabase', 'Prisma', 'NextAuth'] },
+        { id: uid(), name: 'ai-commit', description: 'AI-generated git commit messages via local LLM', status: 'complete', progress: 100, githubUrl: 'https://github.com/sa1701/ai-commit', techStack: ['Python', 'Click', 'Ollama'] },
+        { id: uid(), name: 'Big Data ML', description: 'Decision tree + ensemble methods built from scratch', status: 'complete', progress: 100, githubUrl: 'https://github.com/sa1701/big-data-ml', techStack: ['Python', 'Jupyter', 'scikit-learn', 'Pandas'] },
       ],
       updateProject: (id, updates) =>
         set((s) => ({
