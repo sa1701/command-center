@@ -238,7 +238,7 @@ export const useGradeStore = create<GradeState>()(
           grades: s.grades.map((g) => (g.id === id ? { ...g, ...updates } : g)),
         })),
     }),
-    { name: 'widget-grades' }
+    { name: 'widget-grades-v2' }
   )
 );
 
@@ -562,7 +562,7 @@ export const useProjectStore = create<ProjectState>()(
           projects: s.projects.map(p => p.id === id ? { ...p, ...updates } : p),
         })),
     }),
-    { name: 'widget-projects' }
+    { name: 'widget-projects-v2' }
   )
 );
 
