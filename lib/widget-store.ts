@@ -443,67 +443,67 @@ export interface WorkoutLog {
   exercises: Record<string, LoggedSet[]>; // exercise name → sets
 }
 
-type WorkoutDay = 'Upper A' | 'Lower A' | 'Upper B' | 'Lower B';
+export type WorkoutDay = 'Upper A' | 'Lower A' | 'Upper B' | 'Lower B' | 'Run' | 'Rest';
+export type DayStatus = 'done' | 'skipped';
 
 const WORKOUT_EXERCISES: Record<WorkoutDay, Exercise[]> = {
   'Upper A': [
-    { name: 'Barbell Bench Press', setsTarget: 2, repsTarget: '6-8', muscle: 'Chest' },
-    { name: 'Incline DB Press', setsTarget: 2, repsTarget: '8-10', muscle: 'Upper Chest' },
-    { name: 'Cable Fly (low-to-high)', setsTarget: 2, repsTarget: '12-15', muscle: 'Chest' },
-    { name: 'Overhead Press', setsTarget: 2, repsTarget: '6-8', muscle: 'Shoulders' },
-    { name: 'Cable Lateral Raise', setsTarget: 2, repsTarget: '12-15', muscle: 'Side Delts' },
-    { name: 'Barbell Row', setsTarget: 2, repsTarget: '6-8', muscle: 'Back' },
-    { name: 'Straight-Arm Pulldown', setsTarget: 2, repsTarget: '12-15', muscle: 'Lats' },
-    { name: 'Cable Face Pull', setsTarget: 2, repsTarget: '15-20', muscle: 'Rear Delts' },
-    { name: 'Tricep Pushdown', setsTarget: 2, repsTarget: '10-12', muscle: 'Triceps' },
+    { name: 'Incline Smith Press', setsTarget: 3, repsTarget: '6-10', muscle: 'Chest' },
+    { name: 'Flat DB Press', setsTarget: 3, repsTarget: '8-12', muscle: 'Chest' },
+    { name: 'Cable Lateral Raise', setsTarget: 3, repsTarget: '10-15', muscle: 'Side Delts' },
+    { name: 'Lat Pulldown', setsTarget: 3, repsTarget: '8-12', muscle: 'Lats' },
+    { name: 'Overhead Cable Tricep Ext', setsTarget: 3, repsTarget: '10-15', muscle: 'Triceps' },
   ],
   'Lower A': [
-    { name: 'Barbell Squat', setsTarget: 2, repsTarget: '5-7', muscle: 'Quads' },
-    { name: 'Leg Press', setsTarget: 2, repsTarget: '8-12', muscle: 'Quads' },
-    { name: 'Leg Extension', setsTarget: 2, repsTarget: '12-15', muscle: 'Quads' },
-    { name: 'Romanian Deadlift', setsTarget: 2, repsTarget: '8-10', muscle: 'Hamstrings' },
-    { name: 'Leg Curl', setsTarget: 2, repsTarget: '10-12', muscle: 'Hamstrings' },
-    { name: 'Standing Calf Raise', setsTarget: 2, repsTarget: '10-12', muscle: 'Calves' },
-    { name: 'Seated Calf Raise', setsTarget: 2, repsTarget: '12-15', muscle: 'Calves' },
+    { name: 'Leg Press', setsTarget: 3, repsTarget: '8-12', muscle: 'Quads' },
+    { name: 'Leg Extension', setsTarget: 3, repsTarget: '10-15', muscle: 'Quads' },
+    { name: 'Seated Hip Abductor', setsTarget: 3, repsTarget: '12-15', muscle: 'Abductors' },
+    { name: 'Seated Leg Curl', setsTarget: 3, repsTarget: '10-15', muscle: 'Hamstrings' },
+    { name: 'Standing Calf Raise', setsTarget: 3, repsTarget: '12-15', muscle: 'Calves' },
   ],
   'Upper B': [
-    { name: 'Weighted Pull-ups', setsTarget: 2, repsTarget: '6-8', muscle: 'Lats' },
-    { name: 'Cable Row (wide grip)', setsTarget: 2, repsTarget: '8-10', muscle: 'Back' },
-    { name: 'Chest-Supported DB Row', setsTarget: 2, repsTarget: '10-12', muscle: 'Upper Back' },
-    { name: 'DB Shoulder Press', setsTarget: 2, repsTarget: '8-10', muscle: 'Shoulders' },
-    { name: 'Machine Lateral Raise', setsTarget: 2, repsTarget: '12-15', muscle: 'Side Delts' },
-    { name: 'Dips (weighted)', setsTarget: 2, repsTarget: '6-8', muscle: 'Chest/Triceps' },
-    { name: 'Flat DB Fly', setsTarget: 2, repsTarget: '10-12', muscle: 'Chest' },
-    { name: 'Barbell Curl', setsTarget: 2, repsTarget: '8-10', muscle: 'Biceps' },
-    { name: 'Rear Delt Fly (machine)', setsTarget: 2, repsTarget: '12-15', muscle: 'Rear Delts' },
+    { name: 'Seated DB Shoulder Press', setsTarget: 3, repsTarget: '8-12', muscle: 'Shoulders' },
+    { name: 'Pec Deck', setsTarget: 3, repsTarget: '10-15', muscle: 'Chest' },
+    { name: 'DB Lateral Raise', setsTarget: 4, repsTarget: '10-15', muscle: 'Side Delts' },
+    { name: 'Cable Row', setsTarget: 3, repsTarget: '8-12', muscle: 'Back' },
+    { name: 'Tricep Rope Pushdown', setsTarget: 3, repsTarget: '10-15', muscle: 'Triceps' },
   ],
   'Lower B': [
-    { name: 'Deadlift (conventional)', setsTarget: 2, repsTarget: '4-6', muscle: 'Posterior Chain' },
-    { name: 'Bulgarian Split Squat', setsTarget: 2, repsTarget: '8-10', muscle: 'Quads/Glutes' },
-    { name: 'Hack Squat', setsTarget: 2, repsTarget: '10-12', muscle: 'Quads' },
-    { name: 'Seated Leg Curl', setsTarget: 2, repsTarget: '10-12', muscle: 'Hamstrings' },
-    { name: 'Hip Thrust', setsTarget: 2, repsTarget: '8-10', muscle: 'Glutes' },
-    { name: 'Standing Calf Raise', setsTarget: 2, repsTarget: '10-12', muscle: 'Calves' },
-    { name: 'Seated Calf Raise', setsTarget: 2, repsTarget: '12-15', muscle: 'Calves' },
+    { name: 'DB Romanian Deadlift', setsTarget: 3, repsTarget: '8-12', muscle: 'Hamstrings' },
+    { name: 'Bulgarian Split Squat', setsTarget: 3, repsTarget: '8-12/leg', muscle: 'Quads/Glutes' },
+    { name: 'Hip Abductor (leaning fwd)', setsTarget: 3, repsTarget: '12-15', muscle: 'Glute Medius' },
+    { name: 'Lying Leg Curl', setsTarget: 3, repsTarget: '10-15', muscle: 'Hamstrings' },
+    { name: 'Seated Calf Raise', setsTarget: 3, repsTarget: '12-15', muscle: 'Calves' },
   ],
+  'Run': [],
+  'Rest': [],
 };
 
-// Mon=Upper A, Tue=Lower A, Wed=Rest, Thu=Upper B, Fri=Lower B, Sat/Sun=Rest
+// JS day (0=Sun … 6=Sat) → WorkoutDay
 const WORKOUT_SCHEDULE: Record<number, WorkoutDay> = {
+  0: 'Rest',    // Sunday
   1: 'Upper A', // Monday
   2: 'Lower A', // Tuesday
+  3: 'Run',     // Wednesday
   4: 'Upper B', // Thursday
   5: 'Lower B', // Friday
+  6: 'Run',     // Saturday
 };
 
 interface WorkoutState {
   logs: WorkoutLog[];
   exercises: Record<WorkoutDay, Exercise[]>;
   schedule: Record<number, WorkoutDay>;
-  getTodayWorkout: () => WorkoutDay | null;
+  dayStatus: Record<string, DayStatus>;
+  dayOverride: Record<string, WorkoutDay>;
+  getTodayWorkout: () => WorkoutDay;
+  getWorkoutFor: (date: string, jsDay: number) => WorkoutDay;
   logSet: (date: string, workoutType: string, exerciseName: string, set: LoggedSet) => void;
   getLog: (date: string) => WorkoutLog | undefined;
   getExerciseHistory: (exerciseName: string, limit?: number) => { date: string; sets: LoggedSet[] }[];
+  setDayStatus: (date: string, status: DayStatus | null) => void;
+  swapDay: (date: string, workoutDay: WorkoutDay) => void;
+  clearOverride: (date: string) => void;
 }
 
 export const useWorkoutStore = create<WorkoutState>()(
@@ -512,9 +512,15 @@ export const useWorkoutStore = create<WorkoutState>()(
       logs: [],
       exercises: WORKOUT_EXERCISES,
       schedule: WORKOUT_SCHEDULE,
+      dayStatus: {},
+      dayOverride: {},
       getTodayWorkout: () => {
-        const day = new Date().getDay(); // 0=Sun, 1=Mon...
-        return WORKOUT_SCHEDULE[day] ?? null;
+        const jsDay = new Date().getDay();
+        return WORKOUT_SCHEDULE[jsDay] ?? 'Rest';
+      },
+      getWorkoutFor: (date, jsDay) => {
+        const s = get();
+        return s.dayOverride[date] ?? s.schedule[jsDay] ?? 'Rest';
       },
       logSet: (date, workoutType, exerciseName, loggedSet) =>
         set((s) => {
@@ -541,8 +547,24 @@ export const useWorkoutStore = create<WorkoutState>()(
           .slice(-limit)
           .map(l => ({ date: l.date, sets: l.exercises[exerciseName] }));
       },
+      setDayStatus: (date, status) =>
+        set((s) => {
+          const next = { ...s.dayStatus };
+          if (status === null) { delete next[date]; } else { next[date] = status; }
+          return { dayStatus: next };
+        }),
+      swapDay: (date, workoutDay) =>
+        set((s) => ({ dayOverride: { ...s.dayOverride, [date]: workoutDay } })),
+      clearOverride: (date) =>
+        set((s) => {
+          const nextOverride = { ...s.dayOverride };
+          const nextStatus = { ...s.dayStatus };
+          delete nextOverride[date];
+          delete nextStatus[date];
+          return { dayOverride: nextOverride, dayStatus: nextStatus };
+        }),
     }),
-    { name: 'widget-workout' }
+    { name: 'widget-workout-v2' }
   )
 );
 
