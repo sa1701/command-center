@@ -427,8 +427,8 @@ export const useTimetableStore = create<TimetableState>()(() => ({
 
 export interface Exercise {
   name: string;
-  setsTarget: number;
-  repsTarget: string; // e.g., "6-8"
+  set1Reps: string; // top set
+  set2Reps: string; // back-off set
   muscle: string;
 }
 
@@ -446,34 +446,36 @@ export interface WorkoutLog {
 export type WorkoutDay = 'Upper A' | 'Lower A' | 'Upper B' | 'Lower B' | 'Run' | 'Rest';
 export type DayStatus = 'done' | 'skipped';
 
+// TNF 4-day split — 2 working sets per exercise (Top Set / Back-off Set)
 const WORKOUT_EXERCISES: Record<WorkoutDay, Exercise[]> = {
   'Upper A': [
-    { name: 'Incline Smith Press', setsTarget: 3, repsTarget: '6-10', muscle: 'Chest' },
-    { name: 'Flat DB Press', setsTarget: 3, repsTarget: '8-12', muscle: 'Chest' },
-    { name: 'Cable Lateral Raise', setsTarget: 3, repsTarget: '10-15', muscle: 'Side Delts' },
-    { name: 'Lat Pulldown', setsTarget: 3, repsTarget: '8-12', muscle: 'Lats' },
-    { name: 'Overhead Cable Tricep Ext', setsTarget: 3, repsTarget: '10-15', muscle: 'Triceps' },
+    { name: 'Incline Dumbbell Press',          set1Reps: '5-8',   set2Reps: '8-12',  muscle: 'Chest' },
+    { name: 'Lat Pulldown',                    set1Reps: '6-10',  set2Reps: '8-12',  muscle: 'Lats' },
+    { name: 'Iso-lateral Chest Press',         set1Reps: '8-12',  set2Reps: '8-12',  muscle: 'Chest' },
+    { name: 'Katana Extension (Cables)',        set1Reps: '8-12',  set2Reps: '8-12',  muscle: 'Triceps' },
+    { name: 'Cross-Body Cable Lateral Raise',  set1Reps: '10-15', set2Reps: '10-15', muscle: 'Side Delts' },
   ],
   'Lower A': [
-    { name: 'Leg Press', setsTarget: 3, repsTarget: '8-12', muscle: 'Quads' },
-    { name: 'Leg Extension', setsTarget: 3, repsTarget: '10-15', muscle: 'Quads' },
-    { name: 'Seated Hip Abductor', setsTarget: 3, repsTarget: '12-15', muscle: 'Abductors' },
-    { name: 'Seated Leg Curl', setsTarget: 3, repsTarget: '10-15', muscle: 'Hamstrings' },
-    { name: 'Standing Calf Raise', setsTarget: 3, repsTarget: '12-15', muscle: 'Calves' },
+    { name: 'Seated Leg Curl',                 set1Reps: '8-12',  set2Reps: '8-12',  muscle: 'Hamstrings' },
+    { name: 'Hack Squat / Pendulum Squat',     set1Reps: '5-8',   set2Reps: '8-12',  muscle: 'Quads' },
+    { name: 'Leg Extension',                   set1Reps: '10-15', set2Reps: '10-15', muscle: 'Quads' },
+    { name: 'Seated Hip Abductor',             set1Reps: '12-15', set2Reps: '12-15', muscle: 'Abductors' },
+    { name: 'Standing Calf Raise',             set1Reps: '10-15', set2Reps: '10-15', muscle: 'Calves' },
   ],
   'Upper B': [
-    { name: 'Seated DB Shoulder Press', setsTarget: 3, repsTarget: '8-12', muscle: 'Shoulders' },
-    { name: 'Pec Deck', setsTarget: 3, repsTarget: '10-15', muscle: 'Chest' },
-    { name: 'DB Lateral Raise', setsTarget: 4, repsTarget: '10-15', muscle: 'Side Delts' },
-    { name: 'Cable Row', setsTarget: 3, repsTarget: '8-12', muscle: 'Back' },
-    { name: 'Tricep Rope Pushdown', setsTarget: 3, repsTarget: '10-15', muscle: 'Triceps' },
+    { name: 'Seated DB Shoulder Press',        set1Reps: '6-10',  set2Reps: '8-12',  muscle: 'Shoulders' },
+    { name: 'Chest-Supported Row',             set1Reps: '8-12',  set2Reps: '8-12',  muscle: 'Back' },
+    { name: 'Cable Row (Seated)',              set1Reps: '8-12',  set2Reps: '8-12',  muscle: 'Back' },
+    { name: 'Rope Overhead Extension',         set1Reps: '10-15', set2Reps: '10-15', muscle: 'Triceps' },
+    { name: 'Seated DB Bicep Curl',            set1Reps: '6-10',  set2Reps: '8-12',  muscle: 'Biceps' },
+    { name: 'Dumbbell Lateral Raise',          set1Reps: '10-15', set2Reps: '10-15', muscle: 'Side Delts' },
   ],
   'Lower B': [
-    { name: 'DB Romanian Deadlift', setsTarget: 3, repsTarget: '8-12', muscle: 'Hamstrings' },
-    { name: 'Bulgarian Split Squat', setsTarget: 3, repsTarget: '8-12/leg', muscle: 'Quads/Glutes' },
-    { name: 'Hip Abductor (leaning fwd)', setsTarget: 3, repsTarget: '12-15', muscle: 'Glute Medius' },
-    { name: 'Lying Leg Curl', setsTarget: 3, repsTarget: '10-15', muscle: 'Hamstrings' },
-    { name: 'Seated Calf Raise', setsTarget: 3, repsTarget: '12-15', muscle: 'Calves' },
+    { name: 'Smith / DB RDL',                  set1Reps: '6-10',  set2Reps: '8-12',  muscle: 'Hamstrings' },
+    { name: 'Leg Press (feet high & wide)',    set1Reps: '8-12',  set2Reps: '8-12',  muscle: 'Quads/Glutes' },
+    { name: 'Seated Hip Abductor (lean fwd)',  set1Reps: '12-15', set2Reps: '12-15', muscle: 'Glute Medius' },
+    { name: 'Lying Leg Curl',                  set1Reps: '8-12',  set2Reps: '8-12',  muscle: 'Hamstrings' },
+    { name: 'Seated Calf Raise',               set1Reps: '10-15', set2Reps: '10-15', muscle: 'Calves' },
   ],
   'Run': [],
   'Rest': [],
@@ -564,7 +566,7 @@ export const useWorkoutStore = create<WorkoutState>()(
           return { dayOverride: nextOverride, dayStatus: nextStatus };
         }),
     }),
-    { name: 'widget-workout-v2' }
+    { name: 'widget-workout-v3' }
   )
 );
 

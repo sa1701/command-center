@@ -151,7 +151,7 @@ function ExerciseCard({ exercise, loggedSets, history, onLogSet }: ExerciseCardP
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium truncate" style={{ color: 'var(--text)' }}>{exercise.name}</p>
           <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-            {exercise.muscle} · {exercise.setsTarget} × {exercise.repsTarget}
+            {exercise.muscle} · <span style={{ color: 'var(--accent)', opacity: 0.9 }}>Top: {exercise.set1Reps}</span> · Back-off: {exercise.set2Reps}
           </p>
         </div>
         {history.length > 1 && (
